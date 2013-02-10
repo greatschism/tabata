@@ -1,0 +1,14 @@
+function Button(args) {
+	var instance = Titanium.UI.createButton({
+		title: args.title,
+		backgroundImage: args.backgroundImage,
+		height: args.height,
+		width: args.width,
+		top: args.top,
+		left: args.left
+	});
+	
+	return instance;
+};
+
+module.exports = Button;

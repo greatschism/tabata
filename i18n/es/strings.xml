@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="ready">Preparados</string>	
+	<string name="set">Listos</string>
+	<string name="go">¡Ya!</string>
+	<string name="start">Empezar</string>
+	<string name="reset">Reinicializar</string>
+	<string name="pause">Pausa</string>
+	<string name="resume">continuar</string>
+	<string name="started">comenzó</string>
+</resources>
