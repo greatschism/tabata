@@ -1,2 +1,9 @@
+<<<<<<< HEAD
 /build.log
 /build/.gitignore
+=======
+# Build folder and log file
+build/
+build.log
+.DS_Store
+>>>>>>> 3a2f8f33c4e725ac2270763a76a3aa523910f4e0
