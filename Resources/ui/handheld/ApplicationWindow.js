@@ -27,6 +27,33 @@ function ApplicationWindow() {
 	
 	Ti.Media.audioSessionMode = Ti.Media.AUDIO_SESSION_MODE_AMBIENT;
 	
+	
+///////////////////////////	
+	
+// where you create the audioplayer
+var audioPlayer = Ti.Media.createAudioPlayer({ 
+    url: 'http://robtowns.com/music/blind_willie.mp3',
+    allowBackground: true
+});  
+Ti.App.addEventListener('audioplay', function(data) { 
+     audioPlayer.play();
+});
+Ti.App.addEventListener('audiostop', function(data) { 
+     audioPlayer.stop();
+});
+Ti.App.addEventListener('audiourl', function(data) { 
+     audioPlayer.setUrl(data.url);
+});
+
+
+///////////////////////
+	
+	
+	
+Ti.API.info(audioPlayer);	
+	
+	
+	
 	// Hide status bar
 	Ti.UI.iPhone.hideStatusBar();
 	

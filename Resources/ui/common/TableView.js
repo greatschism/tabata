@@ -25,20 +25,26 @@ function TableView(_args) {
     function round5(x) {
         return (x % 5) >= 2.5 ? parseInt(x / 5) * 5 + 5 : parseInt(x / 5) * 5;
     }
+    
+    // Create countdown numbers Label
+    Label = require('ui/common/Label');
         
     // create first row
     var row = Ti.UI.createTableViewRow({title:'Go', hasChild:true});
     row.backgroundColor = '#FFFFFF';
     row.selectedBackgroundColor = '#385292';
     row.height = 40;
-    var goLabel = Titanium.UI.createLabel({
-        text:goSound,
-        color:'#385292',
-        textAlign:'right',
-        font:{fontSize:14},
-        width:250,
-        height:'auto'
-    });
+    
+    var goLabel = new Label(
+        argsGoLabel = {
+            text: goSound,
+            color: '#385292',
+            textAlign: 'right',
+            font:{ fontSize: 14 },
+            width: 250,
+            height: 'auto'
+        });
+    
     row.className = 'header';
     row.add(goLabel);
     data.push(row);
@@ -47,14 +53,17 @@ function TableView(_args) {
     row.backgroundColor = '#FFFFFF';
     row.selectedBackgroundColor = '#385292';
     row.height = 40;
-    var restLabel = Titanium.UI.createLabel({
-        text:restSound,
-        color:'#385292',
-        textAlign:'right',
-        font:{fontSize:14},
-        width:250,
-        height:'auto'
+    
+    var restLabel = new Label(
+        argsRestLabel = {
+        text: restSound,
+        color: '#385292',
+        textAlign: 'right',
+        font:{ fontSize: 14 },
+        width: 250,
+        height: 'auto'
     });
+    
     row.className = 'header';
     row.add(restLabel);
     data.push(row);
@@ -63,13 +72,14 @@ function TableView(_args) {
     row.backgroundColor = '#FFFFFF';
     row.selectedBackgroundColor = '#385292';
     row.height = 40;
-    var finishLabel = Titanium.UI.createLabel({
-        text:finishSound,
-        color:'#385292',
-        textAlign:'right',
-        font:{fontSize:14},
-        width:250,
-        height:'auto'
+    var finishLabel = new Label(
+        argsFinishLabel = {
+        text: finishSound,
+        color: '#385292',
+        textAlign: 'right',
+        font:{ fontSize: 14 },
+        width: 250,
+        height: 'auto'
     });
     row.className = 'header';
     row.add(finishLabel);
@@ -80,18 +90,17 @@ function TableView(_args) {
 		width: 'auto'
 	});
 	
-	var label = Ti.UI.createLabel({ 
-		color: '#FFFFFF',
-		shadowColor: '#222222',
-		shadowOffset: {x:1,y:1},
-		text: 'Sound Effects',
-		textAlign: 'left', 
-		font: {fontFamily: 'Verdana', fontSize:14}, 
-		width: 290,
-		top:10
-	});
-	
-	headerView.add(label);
+	var soundEffectsLabel = new Label(
+        argsSoundEffectsLabel = {
+        text: 'Sound Effects',
+        color: '#FFFFFF',
+        textAlign: 'left',
+        font: { fontFamily: 'Verdana', fontSize: 14 },
+        width: 290,
+        top: 10,
+    });
+
+	headerView.add(soundEffectsLabel);
 
 
     /* Picker and Table */
@@ -225,7 +234,7 @@ function TableView(_args) {
     /* End Picker and Table */
 
 
-/* Start the table view for Rest */
+    /* Start the table view for Rest */
     var data = [];
     
     // create Rest Slider Row
@@ -242,15 +251,15 @@ function TableView(_args) {
         thumbImage: '/images/slider_off.png',
         highlightedThumbImage: '/images/slider_on.png'
     });
-    
-    var slider_go_label = Ti.UI.createLabel({
-        text: slider_go.value,
-        width: '100%',
-        height: 'auto',
-        font: {fontFamily: 'Helvetica', fontSize: 14},
-        top: 0,
-        left: 0,
-        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
+    var slider_go_label = new Label(
+        argsSliderGoLabel = {
+            text: slider_go.value,
+            width: '100%',
+            height: 'auto',
+            font: {fontFamily: 'Helvetica', fontSize: 14},
+            top: 0,
+            left: 0,
+            textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
         });
     
     slider_go.addEventListener('change', function(e) {
@@ -268,17 +277,15 @@ function TableView(_args) {
         width: 'auto'
     });
     
-    var go_label = Ti.UI.createLabel({ 
-        color: '#FFFFFF',
-        shadowColor: '#222222',
-        shadowOffset: {x:1,y:1},
-        text: 'Workout in Seconds (default 20)',
-        textAlign: 'left', 
-        font: {fontFamily: 'Verdana', fontSize:14}, 
-        width: 290,
-        top:10
-    });
-    
+    var go_label = new Label(
+        argsGoLabel = {
+            color: '#FFFFFF',
+            text: 'Workout in Seconds (default 20)',
+            textAlign: 'left', 
+            font: {fontFamily: 'Verdana', fontSize:14}, 
+            width: 290,
+            top: 10
+        });
     headerViewGo.add(go_label);
     
 
@@ -316,17 +323,17 @@ function TableView(_args) {
         highlightedThumbImage: '/images/slider_on.png'
     });
     
-    var slider_rest_label = Ti.UI.createLabel({
-        text: slider_rest.value,
-        width: '100%',
-        height: 'auto',
-        font: {fontFamily: 'Helvetica', fontSize: 14},
-        top: 0,
-        left: 0,
-        textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
+    var slider_rest_label = new Label(
+        argsRestLabel = {
+            text: slider_rest.value,
+            width: '100%',
+            height: 'auto',
+            font: {fontFamily: 'Helvetica', fontSize: 14},
+            top: 0,
+            left: 0,
+            textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
         });
 
-    
     slider_rest.addEventListener('change', function(e) {
         slider_rest_label.text = String.format("%d", round5(e.value));
         settings.preferences.restTime = slider_rest_label.text;
@@ -341,18 +348,16 @@ function TableView(_args) {
         height: 25,
         width: 'auto'
     });
-    
-    var rest_label = Ti.UI.createLabel({ 
-        color: '#FFFFFF',
-        shadowColor: '#222222',
-        shadowOffset: {x:1,y:1},
-        text: 'Rest in Seconds (default 10)',
-        textAlign: 'left', 
-        font: {fontFamily: 'Verdana', fontSize:14}, 
-        width: 290,
-        top:10
-    });
-    
+    var rest_label = new Label(
+        argsRestLabel = {
+            color: '#FFFFFF',
+            text: 'Rest in Seconds (default 10)',
+            textAlign: 'left', 
+            font: {fontFamily: 'Verdana', fontSize:14}, 
+            width: 290,
+            top: 10
+        });
+   
     headerViewRest.add(rest_label);
 	
 
