@@ -269,8 +269,8 @@ function ApplicationWindow() {
 	set_icons_view.add(set8);
 	
 	
-	trophy_num = Math.floor(Math.random() * 4) + 1;
-	
+	trophy_num = Math.floor(Math.random() * 5) + 1;
+		
 	if(trophy_num === 1){
 	    trophy_image = '/images/trophy.png';
 	};
@@ -286,6 +286,10 @@ function ApplicationWindow() {
 	if(trophy_num === 4){
 	    trophy_image = '/images/trophy4.png'
 	};
+	
+	if(trophy_num === 5){
+        trophy_image = '/images/trophy5.png'
+    };
 	
 	trophy = new Image(
 		trophy_args = {
@@ -336,16 +340,12 @@ function ApplicationWindow() {
                 top: 60,
                 duration: 5
             });
-            
-            Ti.API.info(typeof iAds);
-            Ti.API.info(typeof iAds.visible);
+
             // If iAds isn't there position trophy properly
             if(typeof iAds === 'object' && iAds.visible === true) {
-                Ti.API.info('iAds visible?');
                 // iAds is visible
                 trophy_view.top = -425;
             } else {
-                Ti.API.info('No iAds visible?');
                 // No iAds visible
                 trophy_view.top = -315;
             }
@@ -605,12 +605,12 @@ function ApplicationWindow() {
 
 
 
-    /*
+    
     var MusicPicker = require('/ui/common/MusicPicker');
     var musicControls = new MusicPicker;
 
-    instance.add(musicControls);
-    */
+    //instance.add(musicControls);
+    
 
 
     
