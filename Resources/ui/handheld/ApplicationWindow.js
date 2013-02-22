@@ -27,33 +27,6 @@ function ApplicationWindow() {
 	
 	Ti.Media.audioSessionMode = Ti.Media.AUDIO_SESSION_MODE_AMBIENT;
 	
-	
-///////////////////////////	
-	
-// where you create the audioplayer
-var audioPlayer = Ti.Media.createAudioPlayer({ 
-    url: 'http://robtowns.com/music/blind_willie.mp3',
-    allowBackground: true
-});  
-Ti.App.addEventListener('audioplay', function(data) { 
-     audioPlayer.play();
-});
-Ti.App.addEventListener('audiostop', function(data) { 
-     audioPlayer.stop();
-});
-Ti.App.addEventListener('audiourl', function(data) { 
-     audioPlayer.setUrl(data.url);
-});
-
-
-///////////////////////
-	
-	
-	
-Ti.API.info(audioPlayer);	
-	
-	
-	
 	// Hide status bar
 	Ti.UI.iPhone.hideStatusBar();
 	
@@ -323,13 +296,86 @@ Ti.API.info(audioPlayer);
 		}	
 	);
 	
-	trophy_view = Titanium.UI.createView({ 
-		backgroundColor: 'transparent', 
-		width: 220, 
-		height: 192,
-		top: 105
-	}); 
-	trophy_view.add(trophy);
+	
+	
+    trophy_view = Titanium.UI.createView({ 
+        backgroundColor: 'transparent', 
+        width: 220, 
+        height: 192,
+        //top: -325
+        top: 175
+    }); 
+    trophy_view.add(trophy);
+	
+    // Detect iPhone 5 screen (568)
+    var iPhone5 = null;
+    
+    if (Ti.Platform.displayCaps.platformHeight === 568) {
+        iPhone5 = 1;
+    }
+    
+        
+    /* iAds */
+    iAds = Ti.UI.iOS.createAdView({
+        width: 'auto',
+        height: 50,
+        borderColor: '#FFFFFF',
+        backgroundColor: '#000000',
+        top:-550,
+        zIndex:999
+    });
+    
+    
+          
+    // If iPhone5, then move iAds to the bottom
+    if(iPhone5 === 1) {
+        iAds.addEventListener('load', function() {
+            iAds.visible = true;
+          
+            t1 = Titanium.UI.createAnimation({
+                top: 60,
+                duration: 5
+            });
+            
+            Ti.API.info(typeof iAds);
+            Ti.API.info(typeof iAds.visible);
+            // If iAds isn't there position trophy properly
+            if(typeof iAds === 'object' && iAds.visible === true) {
+                Ti.API.info('iAds visible?');
+                // iAds is visible
+                trophy_view.top = -425;
+            } else {
+                Ti.API.info('No iAds visible?');
+                // No iAds visible
+                trophy_view.top = -315;
+            }
+            
+            iAds.animate(t1);
+             
+        });
+    
+    } else {
+        // Older iPhone Screen - put iAd on top
+        
+        iAds.addEventListener('load', function() {
+            iAds.visible = true;
+        
+            t1 = Titanium.UI.createAnimation({
+                top: -460,
+                duration:1250
+            });
+            
+            if(typeof iAds === 'object' && iAds.visible === true) {
+                trophy_view.top = 100;
+            } else {
+                trophy_view.top = 175;
+            }
+            
+            iAds.animate(t1);
+            
+        });  
+    }   
+     
 	
 	soundPulse = Titanium.Media.createSound({
 	    url: 'sounds/pulse.mp3',
@@ -554,27 +600,7 @@ Ti.API.info(audioPlayer);
     });
     
     instance.add(b3);
-
-	/* iAds */ 
-    iAds = Ti.UI.iOS.createAdView({
-        width: 'auto',
-        height: 50,
-        borderColor: '#FFFFFF',
-        backgroundColor: '#000000',
-        top:-550,
-        zIndex:999
-    });
-     
-    t1 = Titanium.UI.createAnimation({
-        top: -460,
-        duration:1250
-    });
     
-    iAds.addEventListener('load', function(){
-        trophy_view.top = 105;   
-        iAds.visible = true;    
-        iAds.animate(t1);         
-    });
     
     iAdsClicked = iAds.addEventListener('action', function(e){
     	if(e.type === 'action' && typeof e.source === 'object'){
@@ -584,7 +610,8 @@ Ti.API.info(audioPlayer);
     });
 
     instance.add(iAds);
- 
+
+   
 	return instance;
 };
 

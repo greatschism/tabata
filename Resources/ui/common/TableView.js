@@ -265,6 +265,9 @@ function TableView(_args) {
     slider_go.addEventListener('change', function(e) {
         slider_go_label.text = String.format("%d", round5(e.value));
         settings.preferences.goTime = slider_go_label.text;
+        
+        // Save the sound preferences so the app can use it.
+        Ti.App.Properties.setString('userData', JSON.stringify(settings));
     });
     
     row.className = 'rest_header';
@@ -337,6 +340,9 @@ function TableView(_args) {
     slider_rest.addEventListener('change', function(e) {
         slider_rest_label.text = String.format("%d", round5(e.value));
         settings.preferences.restTime = slider_rest_label.text;
+        
+        // Save the sound preferences so the app can use it.
+        Ti.App.Properties.setString('userData', JSON.stringify(settings));
     });
     
     row.className = 'rest_header';

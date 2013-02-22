@@ -61,9 +61,10 @@ if(!settings){
 	//yourself what you consider a tablet form factor for android
 	isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
 	
-	//var Window;
-	//Window = require('ui/handheld/ApplicationWindow');
-	 
+	var Window;
+	Window = require('ui/handheld/ApplicationWindow');
+	
+	/* 
     var Window;
     if (isTablet) {
         //Window = require('ui/tablet/ApplicationWindow');
@@ -78,5 +79,7 @@ if(!settings){
             Window = require('ui/handheld/ApplicationWindow');
         }
     }
+    */
+    
 	new Window().open();
 }());
