@@ -602,6 +602,18 @@ function ApplicationWindow() {
     instance.add(b3);
     
     
+
+
+
+    /*
+    var MusicPicker = require('/ui/common/MusicPicker');
+    var musicControls = new MusicPicker;
+
+    instance.add(musicControls);
+    */
+
+
+    
     iAdsClicked = iAds.addEventListener('action', function(e){
     	if(e.type === 'action' && typeof e.source === 'object'){
     		// Courtesy for clicking the iAd!
@@ -609,7 +621,31 @@ function ApplicationWindow() {
     	}
     });
 
+
+
+
+
     instance.add(iAds);
+    
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
 
    
 	return instance;
