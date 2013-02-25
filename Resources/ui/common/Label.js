@@ -11,7 +11,8 @@ function Label(args) {
 	    textAlign: args.textAlign,
 	    opacity: args.opacity,
 	    shadowColor:'#404040',
-	    shadowOffset: {x:1,y:1}
+	    shadowOffset: {x:1,y:1},
+	    bottom: args.bottom
 	});
 	
 	return instance;

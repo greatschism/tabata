@@ -1,38 +1,41 @@
 function music_picker() {
     var instance = Titanium.UI.createView({
-       
-        height: 'auto',
-        width: 'auto',
-        backgroundColor: 'green',
+        top: -45,
+        //height: 35,
+        height: 60,
+        width: 270,
+        left: 0,
+        backgroundColor: 'white',
+        opacity: .10
     });
     
     var player = null;
     
     var info = Ti.UI.createLabel({
-        text:null,
-        height:'auto',
-        width:'auto',
-        top:200
+        text: null,
+        height: 'auto',
+        width: 'auto',
+        top: 200
     });
     instance.add(info);
     
     var title = Ti.UI.createLabel({
-        text:null,
-        height:'auto',
-        width:'auto',
-        top:220
+        text: null,
+        height: 'auto',
+        width: 'auto',
+        top: 220
     });
     
     instance.add(title);
     
     var timeBar = Ti.UI.createProgressBar({
-        min:0,
-        value:0,
-        width:200,
-        height:40,
-        top:240,
+        min: 0,
+        value: 0,
+        width: 'auto',
+        height: 10,
+        tobottom: 0,
         color:'#888',
-        style:Titanium.UI.iPhone.ProgressBarStyle.PLAIN
+        style:Titanium.UI.iPhone.ProgressBarStyle.BAR
     });
     
     instance.add(timeBar);
@@ -110,9 +113,9 @@ function music_picker() {
     var b1 = Ti.UI.createButton({
         title:'Play',
         width:80,
-        height:40,
-        left:20,
-        top:20
+        height:30,
+        left:5,
+        top: 12
     });
     b1.addEventListener('click', function() {
         player.play();
@@ -122,25 +125,26 @@ function music_picker() {
     var b2 = Ti.UI.createButton({
         title:'Pause',
         width:80,
-        height:40,
-        top:20
+        height:30,
+        left: 90,
+        top: 12
     });
     b2.addEventListener('click', function() {
         player.pause();
     });
     instance.add(b2);
     
-    var b3 = Ti.UI.createButton({
+    var stopButton = Ti.UI.createButton({
         title:'Stop',
         width:80,
-        height:40,
-        top:20,
-        right:20
+        height:30,
+        left: 175,
+        top: 12
     });
-    b3.addEventListener('click', function() {
+    stopButton.addEventListener('click', function() {
         player.stop();
     });
-    instance.add(b3);
+    instance.add(stopButton);
     
     var b4 = Ti.UI.createButton({
         title:'Seek >>',

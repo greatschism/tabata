@@ -2,12 +2,12 @@ function ApplicationWindow() {
 	Titanium.App.idleTimerDisabled = false;
 
 	// Create the variables
-	var instance, countdown_image_background, countdown, image, start_button, reset_button, Button, Label, button_controls, iAds,
+	var instance, countdown, image, start_button, reset_button, Button, Label, button_controls, iAds,
 	soundReady, soundRest, soundTada,
 	begin_count = 0, 
 	sets = 0, 
 	isAppRunning = 0,
-	t, count, doCountDown, cdPause, cdReset, startCountDown, startGetReady, resetSets, flipAnimate, trophy_num, trophy_image,
+	t, count, doCountDown, cdPause, cdReset, startCountDown, startGetReady, resetSets, flipAnimate, trophy_image,
 	image_pointer = 0, sayReady, saySet, sayGo, doGo,
 	imagesArray = [
             '/images/background-wood-shadow.png',
@@ -23,7 +23,8 @@ function ApplicationWindow() {
 	tSet, tGo, tDoGo, start_button_listener, startButtonClicked, reset_button_listener, resetButtonClicked,
 	coolDownFinished = 0,
 	countInProgress = 0,
-	iAdsClicked;
+	iAdsClicked,
+	trophy_num = Math.floor(Math.random() * 5) + 1;
 	
 	Ti.Media.audioSessionMode = Ti.Media.AUDIO_SESSION_MODE_AMBIENT;
 	
@@ -101,6 +102,7 @@ function ApplicationWindow() {
 
 	startButtonClicked = function() {
 		if(countInProgress === 0) {
+            trophy_num = Math.floor(Math.random() * 5) + 1;
 			countInProgress = 1;
 			Titanium.App.idleTimerDisabled = true;
 			instance.remove(trophy_view);		
@@ -156,7 +158,11 @@ function ApplicationWindow() {
 			image:'/images/tvscreen_grey.png',
 			height: 275,
 			left: 0,
-			top: 4
+			top: 4,
+			anchorPoint : {
+                x : 0.5,
+                y : 0.5
+            }
 		}
 	);
 	instance.add(tv_screen);
@@ -185,7 +191,7 @@ function ApplicationWindow() {
 		top: 36,
 		layout:'horizontal'
 	}); 
-		instance.add(set_icons_view);
+	instance.add(set_icons_view);
 	
 	// Add images to the set icon view
 	set1 = new Image(
@@ -269,7 +275,7 @@ function ApplicationWindow() {
 	set_icons_view.add(set8);
 	
 	
-	trophy_num = Math.floor(Math.random() * 5) + 1;
+	
 		
 	if(trophy_num === 1){
 	    trophy_image = '/images/trophy.png';
@@ -299,8 +305,6 @@ function ApplicationWindow() {
 			opacity: 0.65
 		}	
 	);
-	
-	
 	
     trophy_view = Titanium.UI.createView({ 
         backgroundColor: 'transparent', 
@@ -546,17 +550,312 @@ function ApplicationWindow() {
 		}
 	});
 
-    var b3 = Ti.UI.createButton({
-	    image: '/images/settings.png',
-	    height:32,
-	    width:40,
-	    top:10,
-	    right:15,
-	    style : Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
-		backgroundColor: 'transparent'	
-	})
+    var musicView = Titanium.UI.createView({
+        bottom: 0,
+        height: 75,
+        width: 'auto',
+        left: 0
+        //backgroundColor: 'white',
+        //opacity: .15,
+    });
     
-    b3.addEventListener('click', function() {
+     var buttonSettings = Ti.UI.createButton({
+        image: '/images/settings.png',
+        width:40,
+        height:32,
+        right:15,
+        top: 8,
+        style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+        backgroundColor: 'transparent'
+    });
+    
+    musicView.add(buttonSettings);
+    
+    var player = null;
+    
+   eqImage = new Image(
+        eq_args = {
+            image: '/images/eq0.png',
+            width: 320,
+            height: 50,
+            opacity: 0.9,
+            bottom: -5
+        }   
+    );
+    musicView.add(eqImage);
+       songInfo = new Label(
+        argsSongInfoLabel = {
+            text: null,
+            width: 310,
+            height: 'auto',
+            bottom: 12,
+            textAlign: 'center',
+            color: '#FFFFFF',
+            font: {fontSize: 10, fontFamily: 'Helvetica', fontWeight: 'bold'}
+        }
+    );        
+   musicView.add(songInfo);
+
+    var player = null;
+    
+    var loaderArrayLength = 5;
+    
+    var loaderIndex = 1;
+    
+    var loaderAnimate;
+    
+    var eq = 0;
+    
+    function loadingAnimation(){
+        eqImage.image = '/images/eq' + loaderIndex + '.png';
+        loaderIndex++;
+        
+        if(loaderIndex === 5) {
+            loaderIndex = 1;
+        }
+    }
+     
+    try {        
+        player = Titanium.Media.systemMusicPlayer;
+        player.repeatMode = Titanium.Media.MUSIC_PLAYER_REPEAT_ALL;
+        if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
+            songInfo.text = player.nowPlaying.title;
+            if (eq === 0) {
+                loaderAnimate = setInterval(loadingAnimation, 125);
+                eq = 1;
+            }
+        }
+        
+        var event1 = 'stateChange';
+        var event2 = 'playingChange';
+        if (Ti.version >= '3.0.0') {
+            event1 = 'statechange';
+            event2 = 'playingchange';
+        }
+        player.addEventListener(event1, function() {
+            
+            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {                
+                //When the play button is pressed
+                songInfo.text = player.nowPlaying.title;
+                
+                // Animate the EQ Bars
+                if (eq === 0) {
+                    loaderAnimate = setInterval(loadingAnimation, 125);
+                    eq = 1;
+                }
+            }
+            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PAUSED) {                
+                //When the pause button is pressed
+ 
+                if (eq === 1){
+                    // Stop animation the EQ Bars
+                    clearInterval(loaderAnimate);
+                    eq = 0;
+                }
+            }
+        });
+        player.addEventListener(event2, function() {
+            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
+                // When a new song is playing (next button pressed)
+                songInfo.text = player.nowPlaying.title;
+            }
+        });
+    }
+    catch (e) {
+        // create alert
+        alert('No music player');
+    }
+    var music_play_button = new Button(
+        music_play_button_args = {
+            image: '/images/music_play.png',
+            width: 40,
+            height: 32,
+            left: 75,
+            top: 8,
+            style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+            backgroundColor: 'transparent',
+            opacity: .75  
+    });
+ 
+    music_play_button.addEventListener('touchstart', function (e) {
+        e.source.setBackgroundGradient({
+            backfillStart: true,
+            colors: [
+                '#00ffffff',
+                '#ffffffff'
+            ],
+            startPoint: { x: '50%', y: '50%' },
+            endPoint: { x: '50%', y: '50%' },
+            startRadius: '72%',
+            endRadius: 0,
+            type: 'radial'
+        });    
+    });
+ 
+    music_play_button.addEventListener('click', function() {
+        player.play();
+    });
+    musicView.add(music_play_button);
+    
+    var music_pause_button = new Button(
+        music_pause_button_args = {
+            image: '/images/music_pause.png',
+            width:40,
+            height:32,
+            left: 140,
+            top: 8,
+            style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+            backgroundColor: 'transparent',
+            opacity: .75
+        }   
+    );
+    music_pause_button.addEventListener('touchstart', function (e) {
+        e.source.setBackgroundGradient({
+            backfillStart: true,
+            colors: [
+                '#00ffffff',
+                '#ffffffff'
+            ],
+            startPoint: { x: '50%', y: '50%' },
+            endPoint: { x: '50%', y: '50%' },
+            startRadius: '72%',
+            endRadius: 0,
+            type: 'radial'
+        });    
+    });
+    music_pause_button.addEventListener('click', function() {
+        player.pause();
+    });
+    musicView.add(music_pause_button);
+   
+   
+    var music_skip_button = new Button(
+       music_skip_button_args = {
+            image: '/images/music_forward.png',
+            width:40,
+            height:32,
+            left: 195,
+            top: 8,
+            style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+            backgroundColor: 'transparent',
+            opacity: .75
+        }   
+    );
+    music_skip_button.addEventListener('touchstart', function (e) {
+        e.source.setBackgroundGradient({
+            backfillStart: true,
+            colors: [
+                '#00ffffff',
+                '#ffffffff'
+            ],
+            startPoint: { x: '50%', y: '50%' },
+            endPoint: { x: '50%', y: '50%' },
+            startRadius: '72%',
+            endRadius: 0,
+            type: 'radial'
+        });    
+    });
+    music_skip_button.addEventListener('touchend', function (e) {
+        e.source.setBackgroundGradient({});
+    });
+    
+    music_skip_button.addEventListener('click', function() {
+        player.skipToNext();
+    });
+     
+    musicView.add(music_skip_button);
+
+    var music_skip_back = new Button(
+        music_skip_back_args = {
+            image: '/images/music_backward.png',
+            width:40,
+            height:32,
+            left: 10,
+            top: 8,
+            style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+            backgroundColor: 'transparent',
+            opacity: .75
+    });
+    
+    music_skip_back.addEventListener('touchstart', function (e) {
+        e.source.setBackgroundGradient({
+            backfillStart: true,
+            colors: [
+                '#00ffffff',
+                '#ffffffff'
+            ],
+            startPoint: { x: '50%', y: '50%' },
+            endPoint: { x: '50%', y: '50%' },
+            startRadius: '72%',
+            endRadius: 0,
+            type: 'radial'
+        });    
+    });
+    music_skip_back.addEventListener('touchend', function (e) {
+        e.source.setBackgroundGradient({});
+    });
+          
+    music_skip_back.addEventListener('click', function() {
+        player.skipToPrevious();
+    });
+
+    musicView.add(music_skip_back);    
+    
+   /*
+    * To Open Music picker: Ti.Media.openMusicLibrary(settingsMusicPicker); 
+    *
+    * 
+    */ 
+
+
+   var settingsMusicPicker = {
+        success:function(picked)
+        {
+            if (!settingsMusicPicker.autohide) {
+                Ti.API.log("You didn't autohide me!");
+                Ti.Media.hideMusicLibrary();
+            }
+            player.setQueue(picked);
+        },
+        error:function(error)
+        {
+            // create alert
+            var a = Titanium.UI.createAlertDialog({title:'Music Picker'});
+    
+            // set message
+            if (error.code == Titanium.Media.NO_MUSIC_PLAYER)
+            {
+                a.setMessage('Please run this test on device');
+            } else {
+                a.setMessage('Unexpected error: ' + error.code);
+            }
+    
+            // show alert
+            a.show();
+        },
+        mediaTypes:[Ti.Media.MUSIC_MEDIA_TYPE_MUSIC],
+        autohide:true,
+        allowMultipleSelections: true
+    };
+     
+    
+    music_skip_button.addEventListener('click', function() {
+        player.stop();
+        
+    });
+
+    instance.add(musicView);
+    
+    buttonSettings.addEventListener('click', function() {
+        
+        
+        
+        Ti.Media.openMusicLibrary(settingsMusicPicker);
+        
+        
+        
+        
+        
         var Win = Titanium.UI.createWindow({
             backgroundImage: instance.backgroundImage,
             layout: 'vertical'
@@ -599,21 +898,6 @@ function ApplicationWindow() {
         
     });
     
-    instance.add(b3);
-    
-    
-
-
-
-    
-    var MusicPicker = require('/ui/common/MusicPicker');
-    var musicControls = new MusicPicker;
-
-    //instance.add(musicControls);
-    
-
-
-    
     iAdsClicked = iAds.addEventListener('action', function(e){
     	if(e.type === 'action' && typeof e.source === 'object'){
     		// Courtesy for clicking the iAd!
@@ -621,33 +905,8 @@ function ApplicationWindow() {
     	}
     });
 
+    //instance.add(iAds);
 
-
-
-
-    instance.add(iAds);
-    
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-   
 	return instance;
 };
 

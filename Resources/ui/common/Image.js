@@ -7,7 +7,8 @@ function Image(args) {
 		left: args.left,
 		borderRadius: args.borderRadius,
 		transform: args.transform,
-		opacity: args.opacity
+		opacity: args.opacity,
+		bottom: args.bottom
 	});
 	
 	return instance;

@@ -80,6 +80,8 @@ if(!settings){
         }
     }
     */
+
+   
     
 	new Window().open();
 }());

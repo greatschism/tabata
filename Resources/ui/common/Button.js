@@ -5,7 +5,10 @@ function Button(args) {
 		height: args.height,
 		width: args.width,
 		top: args.top,
-		left: args.left
+		left: args.left,
+        style: args.style,
+        image: args.image,
+        opacity: args.opacity
 	});
 	
 	return instance;
