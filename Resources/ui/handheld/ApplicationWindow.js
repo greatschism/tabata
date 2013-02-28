@@ -578,7 +578,7 @@ function ApplicationWindow() {
             image: '/images/eq0.png',
             width: 320,
             height: 50,
-            opacity: 0.9,
+            opacity: 0.75,
             bottom: -5
         }   
     );
@@ -617,7 +617,6 @@ function ApplicationWindow() {
      
     try {        
         player = Titanium.Media.systemMusicPlayer;
-        player.repeatMode = Titanium.Media.MUSIC_PLAYER_REPEAT_ALL;
         if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
             songInfo.text = player.nowPlaying.title;
             if (eq === 0) {
@@ -658,6 +657,12 @@ function ApplicationWindow() {
             if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
                 // When a new song is playing (next button pressed)
                 songInfo.text = player.nowPlaying.title;
+                
+                // When the song changes, if eq is off, animate it  
+                if (eq === 0){
+                    loaderAnimate = setInterval(loadingAnimation, 125);
+                    eq = 1;
+                } 
             }
         });
     }
@@ -676,7 +681,11 @@ function ApplicationWindow() {
             backgroundColor: 'transparent',
             opacity: .75  
     });
- 
+     
+    music_play_button.addEventListener('click', function() {
+        player.play();
+    });
+     
     music_play_button.addEventListener('touchstart', function (e) {
         e.source.setBackgroundGradient({
             backfillStart: true,
@@ -691,10 +700,7 @@ function ApplicationWindow() {
             type: 'radial'
         });    
     });
- 
-    music_play_button.addEventListener('click', function() {
-        player.play();
-    });
+
     musicView.add(music_play_button);
     
     var music_pause_button = new Button(
@@ -740,7 +746,10 @@ function ApplicationWindow() {
             backgroundColor: 'transparent',
             opacity: .75
         }   
-    );
+    ); 
+    music_skip_button.addEventListener('click', function() {
+        player.skipToNext();
+    });
     music_skip_button.addEventListener('touchstart', function (e) {
         e.source.setBackgroundGradient({
             backfillStart: true,
@@ -758,10 +767,6 @@ function ApplicationWindow() {
     music_skip_button.addEventListener('touchend', function (e) {
         e.source.setBackgroundGradient({});
     });
-    
-    music_skip_button.addEventListener('click', function() {
-        player.skipToNext();
-    });
      
     musicView.add(music_skip_button);
 
@@ -775,8 +780,10 @@ function ApplicationWindow() {
             style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
             backgroundColor: 'transparent',
             opacity: .75
+    });   
+    music_skip_back.addEventListener('click', function() {
+        player.skipToPrevious();
     });
-    
     music_skip_back.addEventListener('touchstart', function (e) {
         e.source.setBackgroundGradient({
             backfillStart: true,
@@ -794,11 +801,7 @@ function ApplicationWindow() {
     music_skip_back.addEventListener('touchend', function (e) {
         e.source.setBackgroundGradient({});
     });
-          
-    music_skip_back.addEventListener('click', function() {
-        player.skipToPrevious();
-    });
-
+    
     musicView.add(music_skip_back);    
     
    /*
