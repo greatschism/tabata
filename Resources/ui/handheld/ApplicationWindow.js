@@ -320,8 +320,7 @@ function ApplicationWindow() {
         backgroundColor: 'transparent', 
         width: 220, 
         height: 192,
-        //top: -325
-        top: -250
+        top: -325
     }); 
     trophy_view.add(trophy);
 	
