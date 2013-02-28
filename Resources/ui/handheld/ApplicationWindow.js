@@ -113,6 +113,26 @@ function ApplicationWindow() {
 	startButtonClicked = function() {
 		if(countInProgress === 0) {
             trophy_num = Math.floor(Math.random() * 5) + 1;
+            if(trophy_num === 1){
+                trophy.image = '/images/trophy.png';
+            };
+            
+            if(trophy_num === 2){
+                trophy.image = '/images/trophy2.png';
+            };
+            
+            if(trophy_num === 3){
+                trophy.image = '/images/trophy3.png'
+            };
+            
+            if(trophy_num === 4){
+                trophy.image = '/images/trophy4.png'
+            };
+            
+            if(trophy_num === 5){
+                trophy.image = '/images/trophy5.png'
+            };
+          
 			countInProgress = 1;
 			Titanium.App.idleTimerDisabled = true;
 			instance.remove(trophy_view);		
@@ -284,43 +304,21 @@ function ApplicationWindow() {
 	);
 	set_icons_view.add(set8);
 	
-	
-	
-		
-	if(trophy_num === 1){
-	    trophy_image = '/images/trophy.png';
-	};
-	
-	if(trophy_num === 2){
-	    trophy_image = '/images/trophy2.png';
-	};
-	
-	if(trophy_num === 3){
-	    trophy_image = '/images/trophy3.png'
-	};
-	
-	if(trophy_num === 4){
-	    trophy_image = '/images/trophy4.png'
-	};
-	
-	if(trophy_num === 5){
-        trophy_image = '/images/trophy5.png'
-    };
-	
-	trophy = new Image(
-		trophy_args = {
-			image: trophy_image,
-			width: 200,
-			height: 192,
-			opacity: 0.65
-		}	
-	);
+	  
+    trophy = new Image(
+        trophy_args = {
+            image: '/images/trophy.png',
+            width: 200,
+            height: 192,
+            opacity: 0.65
+        }   
+    );
 	
     trophy_view = Titanium.UI.createView({ 
         backgroundColor: 'transparent', 
         width: 220, 
         height: 192,
-        top: -325
+        top: -350
     }); 
     trophy_view.add(trophy);
 	
@@ -341,8 +339,6 @@ function ApplicationWindow() {
         top:-550,
         zIndex:999
     });
-    
-    
           
     // If iPhone5, then move iAds to the bottom
     if(iPhone5 === 1) {
