@@ -303,8 +303,14 @@ function ApplicationWindow() {
 		}
 	);
 	set_icons_view.add(set8);
-	
-	  
+
+    // Detect iPhone 5 screen (568)
+    var iPhone5 = null;
+    
+    if (Ti.Platform.displayCaps.platformHeight === 568) {
+        iPhone5 = 1;
+    }
+      
     trophy = new Image(
         trophy_args = {
             image: '/images/trophy.png',
@@ -313,23 +319,18 @@ function ApplicationWindow() {
             opacity: 0.65
         }   
     );
-	
+    
+    // Trophy view initial load
     trophy_view = Titanium.UI.createView({ 
         backgroundColor: 'transparent', 
         width: 220, 
         height: 192,
-        top: -350
+        //top: -350
+        top: 150
     }); 
     trophy_view.add(trophy);
-	
-    // Detect iPhone 5 screen (568)
-    var iPhone5 = null;
     
-    if (Ti.Platform.displayCaps.platformHeight === 568) {
-        iPhone5 = 1;
-    }
-    
-        
+            
     /* iAds */
     iAds = Ti.UI.iOS.createAdView({
         width: 'auto',
@@ -339,6 +340,7 @@ function ApplicationWindow() {
         top:-550,
         zIndex:999
     });
+    
           
     // If iPhone5, then move iAds to the bottom
     if(iPhone5 === 1) {
@@ -346,7 +348,7 @@ function ApplicationWindow() {
             iAds.visible = true;
           
             t1 = Titanium.UI.createAnimation({
-                top: 60,
+                top: 25,
                 duration: 5
             });
 
@@ -354,10 +356,7 @@ function ApplicationWindow() {
             if(typeof iAds === 'object' && iAds.visible === true) {
                 // iAds is visible
                 trophy_view.top = -425;
-            } else {
-                // No iAds visible
-                trophy_view.top = -315;
-            }
+            } 
             
             iAds.animate(t1);
              
@@ -370,9 +369,10 @@ function ApplicationWindow() {
             iAds.visible = true;
         
             t1 = Titanium.UI.createAnimation({
-                top: -460,
-                duration:1250
+                top: -495,
+                duration:1500
             });
+            
             
             if(typeof iAds === 'object' && iAds.visible === true) {
                 trophy_view.top = 100;
@@ -380,11 +380,11 @@ function ApplicationWindow() {
                 trophy_view.top = 175;
             }
             
+            
             iAds.animate(t1);
             
         });  
     }   
-     
 	
 	soundPulse = Titanium.Media.createSound({
 	    url: 'sounds/pulse.mp3',
@@ -969,6 +969,7 @@ function ApplicationWindow() {
         
     });
     
+    
     iAdsClicked = iAds.addEventListener('action', function(e){
     	if(e.type === 'action' && typeof e.source === 'object'){
     		// Courtesy for clicking the iAd!
@@ -976,7 +977,7 @@ function ApplicationWindow() {
     	}
     });
 
-    //instance.add(iAds);
+    instance.add(iAds);
 
 	return instance;
 };

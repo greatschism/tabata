@@ -23,7 +23,7 @@ function createAndPlaySound(url) {
 
 if(settings){
 	// Check the app version, if not current, delete userData
-	if(settings.appVersion !== '1.2.0'){
+	if(settings.appVersion !== '1.3.0'){
 		settings = '';
 		Ti.App.Properties.setString('userData', '');
 	}
@@ -34,7 +34,7 @@ if(settings){
 if(!settings){
     // Create user settings and store in an app property
     settings = {
-        appVersion: '1.2.0',
+        appVersion: '1.3.0',
         background: '/images/background-wood-shadow.png',
         preferences: {
             goSound: 'workout-started.mp3',
