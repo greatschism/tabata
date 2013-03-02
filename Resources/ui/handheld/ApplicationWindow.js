@@ -364,7 +364,6 @@ function ApplicationWindow() {
     
     } else {
         // Older iPhone Screen - put iAd on top
-        
         iAds.addEventListener('load', function() {
             iAds.visible = true;
         
@@ -549,27 +548,31 @@ function ApplicationWindow() {
 		
 		if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
             songInfo.text = player.nowPlaying.title;
+            
+            
+            // Remove Play Button, and Add pause button
+            music_play_button.visible = false;
+            music_pause_button.visible = true;
+            
             if (eq === 0) {
                 loaderAnimate = setInterval(loadingAnimation, 125);
                 eq = 1;
             }
             
-            // Remove Play Button, and Add pause button
-            music_play_button.visible = false;
-            music_pause_button.visible = true;
         }
         
-        if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_STOPPED) {
-                //songInfo.text = '';
+        if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_STOPPED || player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PAUSED || player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_INTERRUPTED) {
+                
+                // Remove Play Button, and Add pause button
+                music_play_button.visible = true;
+                music_pause_button.visible = false;
+                
                 if (eq === 1){
                     // Stop animation the EQ Bars
                     clearInterval(loaderAnimate);
                     eq = 0;
                 }
                 
-                // Remove Play Button, and Add pause button
-                music_play_button.visible = true;
-                music_pause_button.visible = false;
             }
 
 	});
@@ -647,94 +650,7 @@ function ApplicationWindow() {
         }
     }
     
-    try {
-        player = Titanium.Media.systemMusicPlayer;
     
-        if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
-            songInfo.text = player.nowPlaying.title;
-            if (eq === 0) {
-                loaderAnimate = setInterval(loadingAnimation, 125);
-                eq = 1;
-            }
-        }
-    
-        var event1 = 'stateChange';
-        var event2 = 'playingChange';
-        if (Ti.version >= '3.0.0') {
-            event1 = 'statechange';
-            event2 = 'playingchange';
-        }
-        player.addEventListener(event1, function() {
-            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_STOPPED) {
-                //songInfo.text = '';
-                
-                // Remove Play Button, and Add pause button
-                music_play_button.visible = true;
-                music_pause_button.visible = false;
-                
-                
-                if (eq === 1){
-                    // Stop animation the EQ Bars
-                    clearInterval(loaderAnimate);
-                    eq = 0;
-                }
-            }
-            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
-                 //When the play button is pressed
-                songInfo.text = player.nowPlaying.title;
-                
-                // Animate the EQ Bars
-                if (eq === 0) {
-                    loaderAnimate = setInterval(loadingAnimation, 125);
-                    eq = 1;
-                }
-                
-                // Remove Play Button, and Add pause button
-                music_play_button.visible = false;
-                music_pause_button.visible = true;
-                
-            }
-            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PAUSED) {                
-                //When the pause button is pressed
- 
-                if (eq === 1){
-                    // Stop animation the EQ Bars
-                    clearInterval(loaderAnimate);
-                    eq = 0;
-                }
-                
-                // Remove Play Button, and Add pause button
-                music_play_button.visible = true;
-                music_pause_button.visible = false;
-                
-            }
-               
-        });
-        player.addEventListener(event2, function() {
-            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
-                // When a new song is playing (next button pressed)
-                songInfo.text = player.nowPlaying.title;
-                
-                // When the song changes, if eq is off, animate it  
-                if (eq === 0){
-                    loaderAnimate = setInterval(loadingAnimation, 125);
-                    eq = 1;
-                }
-                
-                // Remove Play Button, and Add pause button
-                music_play_button.visible = false;
-                music_pause_button.visible = true;
-
-            }
-        });
-    }
-    catch (e) {
-        // create alert
-        Titanium.UI.createAlertDialog({
-            title:'Music Player',
-            message:'Please run this test on device: Inoperative on simulator'
-        }).show();
-    }
     var music_play_button = new Button(
         music_play_button_args = {
             image: '/images/music_play.png',
@@ -924,6 +840,100 @@ function ApplicationWindow() {
     music_settings.addEventListener('click', function(){
         Ti.Media.openMusicLibrary(settingsMusicPicker);
     });
+    
+    
+    try {
+        player = Titanium.Media.systemMusicPlayer;
+    
+        if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
+            songInfo.text = player.nowPlaying.title;
+            
+            music_play_button.visible = false;
+            music_pause_button.visible = true;
+            
+            if (eq === 0) {
+                loaderAnimate = setInterval(loadingAnimation, 125);
+                eq = 1;
+            }
+        }
+    
+        var event1 = 'stateChange';
+        var event2 = 'playingChange';
+        if (Ti.version >= '3.0.0') {
+            event1 = 'statechange';
+            event2 = 'playingchange';
+        }
+        player.addEventListener(event1, function() {
+            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_STOPPED) {
+                //songInfo.text = '';
+                
+                // Remove Play Button, and Add pause button
+                music_play_button.visible = true;
+                music_pause_button.visible = false;
+                
+                
+                if (eq === 1){
+                    // Stop animation the EQ Bars
+                    clearInterval(loaderAnimate);
+                    eq = 0;
+                }
+            }
+            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
+                 //When the play button is pressed
+                songInfo.text = player.nowPlaying.title;
+                
+                // Animate the EQ Bars
+                if (eq === 0) {
+                    loaderAnimate = setInterval(loadingAnimation, 125);
+                    eq = 1;
+                }
+                
+                // Remove Play Button, and Add pause button
+                music_play_button.visible = false;
+                music_pause_button.visible = true;
+                
+            }
+            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PAUSED) {                
+                //When the pause button is pressed
+ 
+                if (eq === 1){
+                    // Stop animation the EQ Bars
+                    clearInterval(loaderAnimate);
+                    eq = 0;
+                }
+                
+                // Remove Play Button, and Add pause button
+                music_play_button.visible = true;
+                music_pause_button.visible = false;
+                
+            }
+               
+        });
+        player.addEventListener(event2, function() {
+            if (player.playbackState == Titanium.Media.MUSIC_PLAYER_STATE_PLAYING) {
+                // When a new song is playing (next button pressed)
+                songInfo.text = player.nowPlaying.title;
+                
+                // When the song changes, if eq is off, animate it  
+                if (eq === 0){
+                    loaderAnimate = setInterval(loadingAnimation, 125);
+                    eq = 1;
+                }
+                
+                // Remove Play Button, and Add pause button
+                music_play_button.visible = false;
+                music_pause_button.visible = true;
+
+            }
+        });
+    }
+    catch (e) {
+        // create alert
+        Titanium.UI.createAlertDialog({
+            title:'Music Player',
+            message:'Please run this test on device: Inoperative on simulator'
+        }).show();
+    }
     
     buttonSettings.addEventListener('click', function() {
 
