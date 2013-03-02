@@ -571,10 +571,8 @@ function ApplicationWindow() {
                     // Stop animation the EQ Bars
                     clearInterval(loaderAnimate);
                     eq = 0;
-                }
-                
+                }   
             }
-
 	});
 	 
 	Ti.App.addEventListener( 'pause', function(e) {
